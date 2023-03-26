@@ -1,0 +1,3 @@
+/home/stanislav/llvm-course/llvm-pass/pass/static/CMakeFiles/VisualDumpPass.dir
+/home/stanislav/llvm-course/llvm-pass/pass/static/CMakeFiles/edit_cache.dir
+/home/stanislav/llvm-course/llvm-pass/pass/static/CMakeFiles/rebuild_cache.dir
