@@ -1,246 +1,153 @@
 digraph G {
 	compound=true
-	subgraph cluster__Z4funcii {
-		node__Z4funcii
-		[style = invis]
-		cluster_24507576->cluster_26820832
-		[ltail=24507576]
-		[lhead=26820832]
-		cluster_24507576->cluster_26820496
-		[ltail=24507576]
-		[lhead=26820496]
-		cluster_24507576->cluster_26820304
-		[ltail=24507576]
-		[lhead=26820304]
-		cluster_24507576->cluster_24772368
-		[ltail=24507576]
-		[lhead=24772368]
-		node_26780064
-		[label="alloca"]
-		node_26780064->node_26793888
-		node_26780064->node_24507920
-		node_26793056
-		[label="alloca"]
-		node_26793056->node_26794096
-		node_26793056->node_26793200
-		node_24507920
-		[label="store"]
-		node_24810304
-		[label="call"]
-		node_26793200
-		[label="store"]
-		node_25170000
-		[label="call"]
-		node_26793888
-		[label="load"]
-		node_26793888->node_26794480
-		node_26794096
-		[label="load"]
-		node_26794096->node_26794336
-		node_26794336
-		[label="mul"]
-		node_26794336->node_26794480
-		node_26794480
-		[label="add"]
-		node_26794480->node_26794736
-		node_26794736
-		[label="ret"]
+	graph
+	[rankdir="TB"]
+	node
+	[shape=rect]
+	subgraph cluster_20415672 {
+		node
+		[label="20415672"]
+		node_20415672
+		[style="invis"]
+		graph
+		[rankdir="TB"]
+		graph
+		[label="_Z4funcii"]
+		node_22688176
+		[label="  %3 = alloca i32, align 4"]
+		node_22702000->node_22688176
+		[color=red]
+		node_20416016->node_22688176
+		[color=red]
+		node_22701168
+		[label="  %4 = alloca i32, align 4"]
+		node_22702208->node_22701168
+		[color=red]
+		node_22701312->node_22701168
+		[color=red]
+		node_22688176->node_22701168
+		[color=green]
+		node_20416016
+		[label="  store i32 %0, i32* %3, align 4"]
+		node_22701168->node_20416016
+		[color=green]
+		node_20718416
+		[label="  call void @llvm.dbg.declare(metadata i32* %3, metadata !259, metadata !DIExpression()), !dbg !260"]
+		node_20416016->node_20718416
+		[color=green]
+		node_22701312
+		[label="  store i32 %1, i32* %4, align 4"]
+		node_20718416->node_22701312
+		[color=green]
+		node_21078112
+		[label="  call void @llvm.dbg.declare(metadata i32* %4, metadata !261, metadata !DIExpression()), !dbg !262"]
+		node_22701312->node_21078112
+		[color=green]
+		node_22702000
+		[label="  %5 = load i32, i32* %3, align 4, !dbg !263"]
+		node_22702592->node_22702000
+		[color=red]
+		node_21078112->node_22702000
+		[color=green]
+		node_22702208
+		[label="  %6 = load i32, i32* %4, align 4, !dbg !264"]
+		node_22702448->node_22702208
+		[color=red]
+		node_22702000->node_22702208
+		[color=green]
+		node_22702448
+		[label="  %7 = mul nsw i32 %6, 2, !dbg !265"]
+		node_22702592->node_22702448
+		[color=red]
+		node_22702208->node_22702448
+		[color=green]
+		node_22702592
+		[label="  %8 = add nsw i32 %5, %7, !dbg !266"]
+		node_22702848->node_22702592
+		[color=red]
+		node_22702448->node_22702592
+		[color=green]
+		node_22702848
+		[label="  ret i32 %8, !dbg !267"]
+		node_22702592->node_22702848
+		[color=green]
 	}
-	subgraph cluster_main {
-		node_main
-		[style = invis]
-		node_25205920
-		[label="alloca"]
-		node_25205920->node_26798144
-		node_25206032
-		[label="alloca"]
-		node_25206032->node_26821136
-		node_26798144
-		[label="store"]
-		node_25247344
-		[label="call"]
-		node_24772368
-		[label="call"]
-		node_24772368->node_26820496
-		node_26820304
-		[label="call"]
-		node_26820304->node_26820496
-		node_26820496
-		[label="call"]
-		node_26820496->node_26820992
-		node_26820832
-		[label="call"]
-		node_26820832->node_26820992
-		node_26820992
-		[label="add"]
-		node_26820992->node_26821136
-		node_26821136
-		[label="store"]
-		node_26808848
-		[label="ret"]
+	subgraph cluster_22702680 {
+		node
+		[label="22702680"]
+		node_22702680
+		[style="invis"]
+		graph
+		[rankdir="TB"]
+		graph
+		[label="main"]
+		node_21114032
+		[label="  %1 = alloca i32, align 4"]
+		node_22706256->node_21114032
+		[color=red]
+		node_21114144
+		[label="  %2 = alloca i32, align 4"]
+		node_22729248->node_21114144
+		[color=red]
+		node_21114032->node_21114144
+		[color=green]
+		node_22706256
+		[label="  store i32 0, i32* %1, align 4"]
+		node_21114144->node_22706256
+		[color=green]
+		node_21155456
+		[label="  call void @llvm.dbg.declare(metadata i32* %2, metadata !269, metadata !DIExpression()), !dbg !270"]
+		node_22706256->node_21155456
+		[color=green]
+		node_20680464
+		[label="  %3 = call noundef i32 @_Z4funcii(i32 noundef 3, i32 noundef 4), !dbg !259"]
+		node_22728608->node_20680464
+		[color=red]
+		node_21155456->node_20680464
+		[color=green]
+		node_22728416
+		[label="  %4 = call noundef i32 @_Z4funcii(i32 noundef 5, i32 noundef 6), !dbg !260"]
+		node_22728608->node_22728416
+		[color=red]
+		node_20680464->node_22728416
+		[color=green]
+		node_22728608
+		[label="  %5 = call noundef i32 @_Z4funcii(i32 noundef %3, i32 noundef %4), !dbg !261"]
+		node_22729104->node_22728608
+		[color=red]
+		node_22728416->node_22728608
+		[color=green]
+		node_22728944
+		[label="  %6 = call noundef i32 @_Z4funcii(i32 noundef 3, i32 noundef 4), !dbg !262"]
+		node_22729104->node_22728944
+		[color=red]
+		node_22728608->node_22728944
+		[color=green]
+		node_22729104
+		[label="  %7 = add nsw i32 %5, %6, !dbg !263"]
+		node_22729248->node_22729104
+		[color=red]
+		node_22728944->node_22729104
+		[color=green]
+		node_22729248
+		[label="  store i32 %7, i32* %2, align 4, !dbg !258"]
+		node_22729104->node_22729248
+		[color=green]
+		node_22716960
+		[label="  ret i32 0, !dbg !264"]
+		node_22729248->node_22716960
+		[color=green]
 	}
-}
-digraph G {
-	compound=true
-	subgraph cluster__Z4funcii {
-		node__Z4funcii
-		[style = invis]
-		cluster_12190904->cluster_14504160
-		[ltail=12190904]
-		[lhead=14504160]
-		cluster_12190904->cluster_14503824
-		[ltail=12190904]
-		[lhead=14503824]
-		cluster_12190904->cluster_14503632
-		[ltail=12190904]
-		[lhead=14503632]
-		cluster_12190904->cluster_12455696
-		[ltail=12190904]
-		[lhead=12455696]
-		node_14463392
-		[label="alloca"]
-		node_14463392->node_14477216
-		node_14463392->node_12191248
-		node_14476384
-		[label="alloca"]
-		node_14476384->node_14477424
-		node_14476384->node_14476528
-		node_12191248
-		[label="store"]
-		node_12493632
-		[label="call"]
-		node_14476528
-		[label="store"]
-		node_12853328
-		[label="call"]
-		node_14477216
-		[label="load"]
-		node_14477216->node_14477808
-		node_14477424
-		[label="load"]
-		node_14477424->node_14477664
-		node_14477664
-		[label="mul"]
-		node_14477664->node_14477808
-		node_14477808
-		[label="add"]
-		node_14477808->node_14478064
-		node_14478064
-		[label="ret"]
-	}
-	subgraph cluster_main {
-		node_main
-		[style = invis]
-		node_12889248
-		[label="alloca"]
-		node_12889248->node_14481472
-		node_12889360
-		[label="alloca"]
-		node_12889360->node_14504464
-		node_14481472
-		[label="store"]
-		node_12930672
-		[label="call"]
-		node_12455696
-		[label="call"]
-		node_12455696->node_14503824
-		node_14503632
-		[label="call"]
-		node_14503632->node_14503824
-		node_14503824
-		[label="call"]
-		node_14503824->node_14504320
-		node_14504160
-		[label="call"]
-		node_14504160->node_14504320
-		node_14504320
-		[label="add"]
-		node_14504320->node_14504464
-		node_14504464
-		[label="store"]
-		node_14492176
-		[label="ret"]
-	}
-}
-digraph G {
-	compound=true
-	subgraph cluster__Z4funcii {
-		node__Z4funcii
-		[style = invis]
-		cluster_37729464->cluster_40042720
-		[ltail=37729464]
-		[lhead=40042720]
-		cluster_37729464->cluster_40042384
-		[ltail=37729464]
-		[lhead=40042384]
-		cluster_37729464->cluster_40042192
-		[ltail=37729464]
-		[lhead=40042192]
-		cluster_37729464->cluster_37994256
-		[ltail=37729464]
-		[lhead=37994256]
-		node_40001952
-		[label="alloca"]
-		node_40001952->node_40015776
-		node_40001952->node_37729808
-		node_40014944
-		[label="alloca"]
-		node_40014944->node_40015984
-		node_40014944->node_40015088
-		node_37729808
-		[label="store"]
-		node_38032192
-		[label="call"]
-		node_40015088
-		[label="store"]
-		node_38391888
-		[label="call"]
-		node_40015776
-		[label="load"]
-		node_40015776->node_40016368
-		node_40015984
-		[label="load"]
-		node_40015984->node_40016224
-		node_40016224
-		[label="mul"]
-		node_40016224->node_40016368
-		node_40016368
-		[label="add"]
-		node_40016368->node_40016624
-		node_40016624
-		[label="ret"]
-	}
-	subgraph cluster_main {
-		node_main
-		[style = invis]
-		node_38427808
-		[label="alloca"]
-		node_38427808->node_40020032
-		node_38427920
-		[label="alloca"]
-		node_38427920->node_40043024
-		node_40020032
-		[label="store"]
-		node_38469232
-		[label="call"]
-		node_37994256
-		[label="call"]
-		node_37994256->node_40042384
-		node_40042192
-		[label="call"]
-		node_40042192->node_40042384
-		node_40042384
-		[label="call"]
-		node_40042384->node_40042880
-		node_40042720
-		[label="call"]
-		node_40042720->node_40042880
-		node_40042880
-		[label="add"]
-		node_40042880->node_40043024
-		node_40043024
-		[label="store"]
-		node_40030736
-		[label="ret"]
-	}
+	node_22728944->node_20415672
+	[lhead=cluster_20415672]
+	[color=orange]
+	node_22728608->node_20415672
+	[lhead=cluster_20415672]
+	[color=orange]
+	node_22728416->node_20415672
+	[lhead=cluster_20415672]
+	[color=orange]
+	node_20680464->node_20415672
+	[lhead=cluster_20415672]
+	[color=orange]
 }

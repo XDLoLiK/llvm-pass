@@ -1,4 +1,5 @@
 #include <fstream>
+#include <ostream>
 #include <string>
 #include <cstdint>
 
@@ -7,6 +8,12 @@ enum class EdgeType {
     ClusterToNode = 2,
     NodeToCluster = 3,
     ClusterToCluster = 4,
+};
+
+enum class AttributeType {
+    Node = 0,
+    Graph = 1,
+    Edge = 2,
 };
 
 class DotBuilder {
@@ -62,8 +69,9 @@ public:
         }
         PrintFormatTabs(); dot_file_ << "subgraph cluster_" << subgraph_name << " {" << std::endl;
         tabs_num_++;
+        AddAttribute("label=\"" + subgraph_name + "\"");
         CreateNode(subgraph_name);
-        AddLabel("style = invis");
+        AddLabel("style=\"invis\"");
         return true;
     }
 
@@ -87,6 +95,36 @@ public:
         return true;
     }
 
+    bool AddAttribute(const std::string& attribute, AttributeType type = AttributeType::Node) {
+        if (!dot_file_.is_open()) {
+            return false;
+        }
+
+        switch (type) {
+            case AttributeType::Node: {
+                PrintFormatTabs(); dot_file_ << "node" << std::endl;
+                break;
+            }
+
+            case AttributeType::Graph: {
+                PrintFormatTabs(); dot_file_ << "graph" << std::endl;
+                break;
+            }
+
+            case AttributeType::Edge: {
+                PrintFormatTabs(); dot_file_ << "edge" << std::endl;
+                break;
+            }
+
+            default: {
+                return false;
+            }
+        }
+
+        AddLabel(attribute);
+        return true;
+    }
+
     bool CreateEdge(const std::string& from, const std::string& to, EdgeType type) {
         if (!dot_file_.is_open()) {
             return false;
@@ -99,21 +137,21 @@ public:
             }
 
             case EdgeType::ClusterToNode: {
-                PrintFormatTabs(); dot_file_ << "cluster_" << from << "->" << "node_" << to << std::endl;
-                AddLabel("ltail=" + from);
+                PrintFormatTabs(); dot_file_ << "node_" << from << "->" << "node_" << to << std::endl;
+                AddLabel("ltail=cluster_" + from);
                 break;
             }
 
             case EdgeType::NodeToCluster: {
-                PrintFormatTabs(); dot_file_ << "node_" << from << "->" << "cluster_" << to << std::endl;
-                AddLabel("lhead=" + to);
+                PrintFormatTabs(); dot_file_ << "node_" << from << "->" << "node_" << to << std::endl;
+                AddLabel("lhead=cluster_" + to);
                 break;
             }
 
             case EdgeType::ClusterToCluster: {
-                PrintFormatTabs(); dot_file_ << "cluster_" << from << "->" << "cluster_" << to << std::endl;
-                AddLabel("ltail=" + from);
-                AddLabel("lhead=" + to);
+                PrintFormatTabs(); dot_file_ << "node_" << from << "->" << "node_" << to << std::endl;
+                AddLabel("ltail=cluster_" + from);
+                AddLabel("lhead=cluster_" + to);
                 break;
             }
 
@@ -121,6 +159,7 @@ public:
                 return false;
             }
         }
+
         return true;
     }
 

@@ -37,7 +37,7 @@ CXX_FLAGS := -Weverything -ggdb3 -O0 -std=c++14 $(addprefix -I, $(INC_DIRS)) \
 # Usage:
 # "make all"  to build the whole project
 # "make pass" to build the pass only
-all: prepare pass $(APP_BUILD)
+all: prepare pass $(APP_BUILD) png
 
 $(APP_BUILD): $(OBJ) $(PASS_OBJ)
 	@$(CXX) $^ -o $@ $(LD_FLAGS)
@@ -92,3 +92,4 @@ clean:
 	@rm -rf $(BIN_DIR)
 	@rm -rf $(BUILD_DIR)
 	@rm -rf $(PASS_BIN_DIR)
+	@rm dump.*
