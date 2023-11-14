@@ -23,7 +23,7 @@ public:
 
     explicit DotBuilder(const std::string& file_name)
         : file_name_(file_name)
-        , dot_file_(file_name_, std::ios::app)
+        , dot_file_(file_name_, std::ios::trunc)
         , tabs_num_(0) {
     }
 
@@ -41,7 +41,7 @@ public:
         if (dot_file_.is_open()) {
             dot_file_.close();
         }
-        dot_file_.open(file_name_, std::ios::app);
+        dot_file_.open(file_name_, std::ios::trunc);
     }
 
     bool BeginGraph(const std::string& graph_name) {
@@ -132,24 +132,24 @@ public:
 
         switch (type) {
             case EdgeType::NodeToNode: {
-                PrintFormatTabs(); dot_file_ << "node_" << from << "->" << "node_" << to << std::endl;
+                PrintFormatTabs(); dot_file_ << MakeNode(from) << "->" << MakeNode(to) << std::endl;
                 break;
             }
 
             case EdgeType::ClusterToNode: {
-                PrintFormatTabs(); dot_file_ << "node_" << from << "->" << "node_" << to << std::endl;
+                PrintFormatTabs(); dot_file_ << MakeNode(from) << "->" << MakeNode(to) << std::endl;
                 AddLabel("ltail=cluster_" + from);
                 break;
             }
 
             case EdgeType::NodeToCluster: {
-                PrintFormatTabs(); dot_file_ << "node_" << from << "->" << "node_" << to << std::endl;
+                PrintFormatTabs(); dot_file_ << MakeNode(from) << "->" << MakeNode(to) << std::endl;
                 AddLabel("lhead=cluster_" + to);
                 break;
             }
 
             case EdgeType::ClusterToCluster: {
-                PrintFormatTabs(); dot_file_ << "node_" << from << "->" << "node_" << to << std::endl;
+                PrintFormatTabs(); dot_file_ << MakeNode(from) << "->" << MakeNode(to) << std::endl;
                 AddLabel("ltail=cluster_" + from);
                 AddLabel("lhead=cluster_" + to);
                 break;
@@ -161,6 +161,11 @@ public:
         }
 
         return true;
+    }
+
+private:
+    static inline std::string MakeNode(const std::string& src) {
+        return "node_" + src;
     }
 
 private:

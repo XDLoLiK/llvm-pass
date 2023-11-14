@@ -1,5 +1,6 @@
 /* IR */
-#include <llvm-14/llvm/IR/Instruction.h>
+#include <llvm-14/llvm/IR/Value.h>
+#include <llvm/IR/Instruction.h>
 #include <llvm/IR/Function.h>
 #include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/InstrTypes.h>
@@ -13,7 +14,7 @@
 #include <llvm/Transforms/Utils/BasicBlockUtils.h>
 
 /* Dot */
-#include "dot_builder.hpp"
+#include <dot_builder.hpp>
 
 namespace {
 
@@ -26,15 +27,10 @@ public:
         , dot_builder_("dump.dot") {
 
         dot_builder_.BeginGraph("G");
-        dot_builder_.AddAttribute("rankdir=\"TB\"", AttributeType::Graph);
         dot_builder_.AddAttribute("shape=rect", AttributeType::Node);
     }
 
     ~GraphvizPass() {
-        for (auto& edge : edges_to_dump_) {
-            dot_builder_.CreateEdge(edge.first, edge.second, EdgeType::NodeToCluster);
-            dot_builder_.AddLabel("color=orange");
-        }
         dot_builder_.EndGraph();
     }
 
@@ -53,12 +49,6 @@ private:
         dot_builder_.BeginSubgraph(func_addr);
         dot_builder_.AddAttribute("rankdir=\"TB\"", AttributeType::Graph);
         dot_builder_.AddAttribute("label=\"" + func.getName().str() + "\"", AttributeType::Graph);
-
-        /* Save function's users for the later dump */
-        for (auto user : func.users()) {
-            auto user_addr = std::to_string(reinterpret_cast<uint64_t>(user));
-            edges_to_dump_.emplace_back(user_addr, func_addr);
-        }
 
         llvm::Instruction* prev_instruction = nullptr;
         for (auto& block : func) {
@@ -80,7 +70,7 @@ private:
                     dot_builder_.AddLabel("color=red");
                 }
 
-                /* Logical order */
+                /* Control flow */
                 if (prev_instruction != nullptr) {
                     auto prev_addr = std::to_string(reinterpret_cast<uint64_t>(prev_instruction));
                     dot_builder_.CreateEdge(prev_addr, instrunction_addr, EdgeType::NodeToNode);
@@ -101,41 +91,7 @@ private:
         llvm::IRBuilder<> builder{context};
         llvm::Type* ret_type = llvm::Type::getVoidTy(context);
 
-        /* Prepare FuncStartLogger function */
-        std::vector<llvm::Type*> logger_start_param_types = {
-            builder.getInt8Ty()->getPointerTo(),
-            builder.getInt8Ty()->getPointerTo(),
-            llvm::Type::getInt32Ty(context)
-        };
-
-        llvm::FunctionType* logger_start_func_type =
-            llvm::FunctionType::get(ret_type, logger_start_param_types, false);
-        llvm::FunctionCallee logger_start_callee =
-            func.getParent()->getOrInsertFunction("FuncStartLogger", logger_start_func_type);
-
-        /* Insert a call to FuncStartLogger function in the function begin */
-        llvm::BasicBlock& entry_basic_block = func.getEntryBlock();
-        builder.SetInsertPoint(&entry_basic_block.front());
-        llvm::Value* func_name = builder.CreateGlobalStringPtr(func.getName());
-        llvm::Value* args[] = {func_name};
-        builder.CreateCall(logger_start_callee, args);
-
-        /* Prepare BinOptLogger function */
-        std::vector<llvm::Type*> logger_bin_opt_param_types = {
-            llvm::Type::getInt32Ty(context),
-            llvm::Type::getInt32Ty(context),
-            llvm::Type::getInt32Ty(context),
-            builder.getInt8Ty()->getPointerTo(),
-            builder.getInt8Ty()->getPointerTo(),
-            llvm::Type::getInt32Ty(context)
-        };
-        
-        llvm::FunctionType* logger_bin_opt_func_type =
-            llvm::FunctionType::get(ret_type, logger_bin_opt_param_types, false);
-        llvm::FunctionCallee logger_bin_opt_callee =
-            func.getParent()->getOrInsertFunction("BinOptLogger", logger_bin_opt_func_type);
-
-        /* Prepare CallLogger function */
+        /* Prepare LogFunctionCall__ function */
         std::vector<llvm::Type*> logger_call_param_types = {
             builder.getInt8Ty()->getPointerTo(),
             builder.getInt8Ty()->getPointerTo(),
@@ -145,9 +101,9 @@ private:
         llvm::FunctionType* logger_call_func_type =
             llvm::FunctionType::get(ret_type, logger_call_param_types, false);
         llvm::FunctionCallee logger_call_callee =
-            func.getParent()->getOrInsertFunction("CallLogger", logger_call_func_type);
+            func.getParent()->getOrInsertFunction("LogFunctionCall__", logger_call_func_type);
 
-        /* Prepare FuncEndLogger function */
+        /* Prepare LogFuncRet__ function */
         std::vector<llvm::Type*> logger_end_param_types = {
             builder.getInt8Ty()->getPointerTo(),
             llvm::Type::getInt32Ty(context)
@@ -156,30 +112,20 @@ private:
         llvm::FunctionType* logger_end_func_type =
             llvm::FunctionType::get(ret_type, logger_end_param_types, false);
         llvm::FunctionCallee logger_end_callee =
-            func.getParent()->getOrInsertFunction("FuncEndLogger", logger_end_func_type);
+            func.getParent()->getOrInsertFunction("LogFuncRet__", logger_end_func_type);
 
         /* Insert loggers for call, binOpt and ret instructions */
         for (auto& block : func) {
             for (auto& instruction : block) {
-                llvm::Value* value_addr = llvm::ConstantInt::get(builder.getInt64Ty(), (int64_t)(&instruction));
-                if (auto* op = llvm::dyn_cast<llvm::BinaryOperator>(&instruction)) {
-                    /* Insert after op */
-                    builder.SetInsertPoint(op);
-                    builder.SetInsertPoint(&block, ++builder.GetInsertPoint());
+                llvm::Value* value_addr =
+                    llvm::ConstantInt::get(builder.getInt64Ty(), (int64_t)(&instruction));
 
-                    /* Insert a call to binOptLogFunc function */
-                    llvm::Value* lhs = op->getOperand(0);
-                    llvm::Value* rhs = op->getOperand(1);
-                    llvm::Value* func_name = builder.CreateGlobalStringPtr(func.getName());
-                    llvm::Value* op_name = builder.CreateGlobalStringPtr(op->getOpcodeName());
-                    llvm::Value* args[] = {op, lhs, rhs, op_name, func_name, value_addr};
-                    builder.CreateCall(logger_bin_opt_callee, args);
-                }
+                /* If the instuction is castable to the CallInst */
                 if (auto* call = llvm::dyn_cast<llvm::CallInst>(&instruction)) {
                     /* Insert before call */
                     builder.SetInsertPoint(call);
 
-                    /* Insert a call to CallLogger function */
+                    /* Insert a call to LogFunctionCall__ function */
                     llvm::Function* callee = call->getCalledFunction();
                     if (callee) {
                         llvm::Value* callee_name = builder.CreateGlobalStringPtr(callee->getName());
@@ -188,6 +134,8 @@ private:
                         builder.CreateCall(logger_call_callee, args);
                     }
                 }
+
+                /* If the instuction is castable to the ReturnInst */
                 if (auto* ret = llvm::dyn_cast<llvm::ReturnInst>(&instruction)) {
                     /* Insert before ret */
                     builder.SetInsertPoint(ret);
@@ -204,7 +152,6 @@ private:
 private:
     static char id;
     DotBuilder dot_builder_;
-    std::vector<Edge> edges_to_dump_;
 };
 
 } /* namespace */

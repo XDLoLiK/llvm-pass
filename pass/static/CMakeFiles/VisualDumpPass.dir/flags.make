@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/clang++-14
 CXX_DEFINES = -DVisualDumpPass_EXPORTS
 
-CXX_INCLUDES = -I/usr/lib/llvm-14/include
+CXX_INCLUDES = -I/usr/lib/llvm-14/include -I/home/stanislav/llvm-course/llvm-pass/pass/include
 
 CXX_FLAGS = -fPIC   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -fno-rtti
 

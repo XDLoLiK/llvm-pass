@@ -17,9 +17,10 @@ PASS_SRC := $(wildcard $(addsuffix /*.cpp, $(DYNAMIC_PASS_DIR)))
 PASS_OBJ := $(addprefix $(PASS_BIN_DIR)/, $(patsubst %.cpp, %.o, $(notdir $(PASS_SRC))))
 
 # Project
-INC_DIRS := include
+INC_DIRS := pass/include
 BIN_DIR := bin
 BUILD_DIR := build
+DUMP_DIR := dump
 APP_BUILD := $(addprefix $(BUILD_DIR)/, $(APPLICATION))
 
 SRC_DIRS := src src/calc
@@ -46,7 +47,7 @@ $(BIN_DIR)/%.o: %.cpp
 	@$(CXX) $< -c -MD -o $@ $(CXX_FLAGS)
 
 $(PASS_BIN_DIR)/%.o: $(DYNAMIC_PASS_DIR)/%.cpp
-	@$(CXX) $< -c -MD -o $@
+	@$(CXX) $< -c -MD -o $@ $(addprefix -I, $(INC_DIRS))
 
 $(PASS_SO): $(wildcard $(addsuffix /*.cpp, $(STATIC_PASS_DIR)))
 	@cmake -S $(STATIC_PASS_DIR) -B $(STATIC_PASS_DIR) $(CMAKE_FLAGS)
@@ -86,10 +87,14 @@ info:
 	@echo [*] SRC: $(SRC)
 
 png:
-	@dot -Tpng dump.dot > dump.png
+	@mkdir -p $(DUMP_DIR)
+	@dot -Tpng dump.dot > $(DUMP_DIR)/dump.png
 
 clean:
 	@rm -rf $(BIN_DIR)
 	@rm -rf $(BUILD_DIR)
 	@rm -rf $(PASS_BIN_DIR)
-	@rm dump.*
+	@rm -rf $(DUMP_DIR)
+
+	@make clean -C $(PASS_DIR)
+	@make clean -C $(STATIC_PASS_DIR)

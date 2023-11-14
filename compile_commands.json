@@ -1,0 +1,13 @@
+[
+{
+  "directory": "/home/stanislav/llvm-course/llvm-pass",
+  "command": "clang++-14 pass/dynamic/log.cpp -c -MD -o pass/dynamic/bin/log.o",
+  "file": "pass/dynamic/log.cpp"
+},
+
+{
+  "directory": "/home/stanislav/llvm-course/llvm-pass",
+  "command": "clang++-14 src/calc/calc.cpp -c -MD -o bin/calc.o -Weverything -ggdb3 -O0 -std=c++14 -Iinclude -flegacy-pass-manager -Xclang -load -Xclang ./pass/static/libVisualDumpPass.so",
+  "file": "src/calc/calc.cpp"
+}
+]

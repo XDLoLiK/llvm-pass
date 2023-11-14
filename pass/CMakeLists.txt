@@ -9,4 +9,7 @@ add_definitions(${LLVM_DEFINITIONS})
 include_directories(${LLVM_INCLUDE_DIRS})
 link_directories(${LLVM_LIBRARY_DIRS})
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+include_directories(include)
 add_subdirectory(static)  # Use your pass name here.

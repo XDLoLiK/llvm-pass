@@ -1,7 +1,6 @@
 add_library(VisualDumpPass MODULE
     # List your source files here.
     visual_dump.cpp
-    dot_builder.hpp
 )
 
 # Use C++11 to compile our pass (i.e., supply -std=c++11).

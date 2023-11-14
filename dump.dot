@@ -1,0 +1,154 @@
+digraph G {
+	compound=true
+	node
+	[shape=rect]
+	subgraph cluster_33650136 {
+		node
+		[label="33650136"]
+		node_33650136
+		[style="invis"]
+		graph
+		[rankdir="TB"]
+		graph
+		[label="_Z4funcii"]
+		node_35932496
+		[label="  %3 = alloca i32, align 4"]
+		node_35946464->node_35932496
+		[color=red]
+		node_33650480->node_35932496
+		[color=red]
+		node_35945632
+		[label="  %4 = alloca i32, align 4"]
+		node_35946672->node_35945632
+		[color=red]
+		node_35945776->node_35945632
+		[color=red]
+		node_35932496->node_35945632
+		[color=green]
+		node_33650480
+		[label="  store i32 %0, i32* %3, align 4"]
+		node_35945632->node_33650480
+		[color=green]
+		node_33952624
+		[label="  call void @llvm.dbg.declare(metadata i32* %3, metadata !259, metadata !DIExpression()), !dbg !260"]
+		node_33650480->node_33952624
+		[color=green]
+		node_35945776
+		[label="  store i32 %1, i32* %4, align 4"]
+		node_33952624->node_35945776
+		[color=green]
+		node_34312224
+		[label="  call void @llvm.dbg.declare(metadata i32* %4, metadata !261, metadata !DIExpression()), !dbg !262"]
+		node_35945776->node_34312224
+		[color=green]
+		node_35946464
+		[label="  %5 = load i32, i32* %3, align 4, !dbg !263"]
+		node_35947056->node_35946464
+		[color=red]
+		node_34312224->node_35946464
+		[color=green]
+		node_35946672
+		[label="  %6 = load i32, i32* %4, align 4, !dbg !264"]
+		node_35946912->node_35946672
+		[color=red]
+		node_35946464->node_35946672
+		[color=green]
+		node_35946912
+		[label="  %7 = mul nsw i32 %6, 2, !dbg !265"]
+		node_35947056->node_35946912
+		[color=red]
+		node_35946672->node_35946912
+		[color=green]
+		node_35947056
+		[label="  %8 = add nsw i32 %5, %7, !dbg !266"]
+		node_35947312->node_35947056
+		[color=red]
+		node_35946912->node_35947056
+		[color=green]
+		node_35947312
+		[label="  ret i32 %8, !dbg !267"]
+		node_35947056->node_35947312
+		[color=green]
+	}
+	subgraph cluster_35947144 {
+		node
+		[label="35947144"]
+		node_35947144
+		[style="invis"]
+		graph
+		[rankdir="TB"]
+		graph
+		[label="main"]
+		node_34348144
+		[label="  %1 = alloca i32, align 4"]
+		node_35950720->node_34348144
+		[color=red]
+		node_34348256
+		[label="  %2 = alloca i32, align 4"]
+		node_35973712->node_34348256
+		[color=red]
+		node_34348144->node_34348256
+		[color=green]
+		node_35950720
+		[label="  store i32 0, i32* %1, align 4"]
+		node_34348256->node_35950720
+		[color=green]
+		node_34389568
+		[label="  call void @llvm.dbg.declare(metadata i32* %2, metadata !269, metadata !DIExpression()), !dbg !270"]
+		node_35950720->node_34389568
+		[color=green]
+		node_33914640
+		[label="  %3 = call noundef i32 @_Z4funcii(i32 noundef 3, i32 noundef 4), !dbg !259"]
+		node_35973072->node_33914640
+		[color=red]
+		node_34389568->node_33914640
+		[color=green]
+		node_35972880
+		[label="  %4 = call noundef i32 @_Z4funcii(i32 noundef 5, i32 noundef 6), !dbg !260"]
+		node_35973072->node_35972880
+		[color=red]
+		node_33914640->node_35972880
+		[color=green]
+		node_35973072
+		[label="  %5 = call noundef i32 @_Z4funcii(i32 noundef %3, i32 noundef %4), !dbg !261"]
+		node_35973568->node_35973072
+		[color=red]
+		node_35972880->node_35973072
+		[color=green]
+		node_35973408
+		[label="  %6 = call noundef i32 @_Z4funcii(i32 noundef 3, i32 noundef 4), !dbg !262"]
+		node_35973568->node_35973408
+		[color=red]
+		node_35973072->node_35973408
+		[color=green]
+		node_35973568
+		[label="  %7 = add nsw i32 %5, %6, !dbg !263"]
+		node_35973712->node_35973568
+		[color=red]
+		node_35973408->node_35973568
+		[color=green]
+		node_35973712
+		[label="  store i32 %7, i32* %2, align 4, !dbg !258"]
+		node_35973568->node_35973712
+		[color=green]
+		node_35961424
+		[label="  ret i32 0, !dbg !264"]
+		node_35973712->node_35961424
+		[color=green]
+	}
+
+	subgraph cluster_Calls {
+		node
+		[label="Calls"]
+		node_35947144
+		[style="invis"]
+		graph
+		[rankdir="TB"]
+		graph
+		[label="Calls"]
+		node_first
+		[label="In main: func(3, 4) = 5"]
+		node_second
+		[label="In main: func(5, 4) = 35"]
+	}
+}
